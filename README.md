@@ -9,7 +9,7 @@ Stay tuned!
 A simple way of setting up a whole basic environment for your
 [A-Frame](http://aframe.io) VR scene.
 
-![gif](https://github.com/feiss/aframe-environment-component/blob/master/assets/aframeenvironment.gif?raw=true)
+[Check out the demo](https://pitilezard.github.io/aframe-environment-component-v2/)
 
 Make sure you are using **A-Frame 0.6.0** or later. Then just include `aframe-environment-component.js` in your HTML:
 

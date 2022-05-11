@@ -1,0 +1,97 @@
+h1 {
+    position: absolute;
+    z-index: 7000;
+    bottom: 30px;
+    left: 40%;
+    left: calc(50% - 160px);
+    margin: 0;
+    font: 28px "Voces", sans-serif;
+    color: #000;
+}
+h1 b {
+    color: white;
+    text-shadow: 1px 2px 0px black;
+    width: 300px;
+    display: inline-block;
+    text-align: center;
+}
+#about {
+    display: none;
+    position: absolute;
+    z-index: 7001;
+    width: 300px;
+    top: 40px;
+    left: 40px;
+    font: 14px "Voces", Arial, sans-serif;
+    color: white;
+    line-height: 1.3rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    box-sizing: border-box;
+}
+#about b {
+    font-weight: bold;
+    font-family: monospace;
+}
+#about p:last-child {
+    margin: 0;
+}
+#about a {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    transition: border-bottom-width 0.1s;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 0 3px;
+}
+#about a:hover {
+    background: rgba(255, 255, 255, 1);
+}
+h1 a {
+    color: white;
+    text-decoration: none;
+    text-shadow: 1px 2px 0px black;
+    font-size: 20px;
+}
+
+@media (max-width: 400px), (max-height: 300px) {
+    #about {
+        left: 5%;
+        top: 5%;
+        width: 90%;
+    }
+    h1 {
+        left: 5%;
+    }
+    h1 b {
+        width: auto;
+    }
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+@keyframes octocat-wave {
+    0%,
+    100% {
+        transform: rotate(0);
+    }
+    20%,
+    60% {
+        transform: rotate(-25deg);
+    }
+    40%,
+    80% {
+        transform: rotate(10deg);
+    }
+}
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+        animation: none;
+    }
+    .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out;
+    }
+}

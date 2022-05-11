@@ -2,16 +2,39 @@
     "name": "aframe-environment-component",
     "version": "2.0.0-alpha.1",
     "description": "Infinite environments for your A-Frame VR scene in just one file.",
-    "main": "dist/aframe-environment-component.js",
-    "cdn": "dist/aframe-environment-component.min.js",
+    "plugin": "dist/aframe-environment-component.js",
+    "pluginmin": "dist/aframe-environment-component.min.js",
+    "demo": "demo/aframe-environment-component.html",
+    "targets": {
+        "main": false,
+        "plugin": {
+            "source": "src/index.js",
+            "context": "browser",
+            "optimize": false,
+            "outputFormat": "global",
+            "distDir": "dist"
+        },
+        "pluginmin": {
+            "source": "src/index.js",
+            "context": "browser",
+            "outputFormat": "global",
+            "distDir": "dist"
+        },
+        "demo": {
+            "source": "src/index.html",
+            "outputFormat": "global",
+            "publicUrl": "/aframe-environment-component-v2",
+            "distDir": "demo"
+        }
+    },
     "scripts": {
         "dev": "parcel src/index.html",
-        "clean": "rm -Rf .parcel-cache dist",
-        "predist": "yarn clean",
-        "dist": "parcel build src/index.js",
-        "postdist": "minify dist/aframe-environment-component.js > dist/aframe-environment-component.min.js",
-        "prepublish": "yarn dist",
-        "ghpages": "ghpages"
+        "clean": "rm -Rf .parcel-cache dist demo",
+        "prebuild": "yarn clean",
+        "build": "parcel build",
+        "prepublish": "yarn build",
+        "predeploy": "yarn build",
+        "deploy": "gh-pages -b ghpages -d demo"
     },
     "repository": {
         "type": "git",
@@ -33,7 +56,7 @@
     },
     "homepage": "https://github.com/PiTiLeZarD/aframe-environment-component#readme",
     "devDependencies": {
-        "minify": "^8.0.4"
+        "ghpages": "^0.0.10"
     },
     "dependencies": {
         "parcel": "^2.5.0"

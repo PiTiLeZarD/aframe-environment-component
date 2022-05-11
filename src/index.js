@@ -1005,7 +1005,6 @@ AFRAME.registerComponent("environment", {
             Object.assign(this.environmentData, this.data);
             Object.assign(this.environmentData, this.presets[this.data.preset]);
             Object.assign(this.environmentData, this.el.components.environment.attrValue);
-            console.log(this.environmentData);
         }
 
         var skyType = this.environmentData.skyType;
@@ -1166,7 +1165,6 @@ AFRAME.registerComponent("environment", {
             str += ", ";
         }
         str += "}";
-        console.log(str);
     },
 
     // dumps current component settings to console.
@@ -1212,7 +1210,6 @@ AFRAME.registerComponent("environment", {
                 }
             }
         }
-        console.log("%c" + params.join("; "), "color: #f48;font-weight:bold");
     },
 
     // Custom Math.random() with seed. Given this.environmentData.seed and x, it always returns the same "random" number
@@ -1338,18 +1335,11 @@ AFRAME.registerComponent("environment", {
                 map: this.groundTexture,
                 emissive: new THREE.Color(0xffffff),
                 emissiveMap: this.gridTexture,
+                flatShading: true,
+                shininess: 0,
             };
 
-            // use .shading for A-Frame < 0.7.0 and .flatShading for A-Frame >= 0.7.0
-            if (new THREE.Material().hasOwnProperty("shading")) {
-                this.groundMaterialProps.shading = this.environmentData.flatShading
-                    ? THREE.FlatShading
-                    : THREE.SmoothShading;
-            } else {
-                this.groundMaterialProps.flatShading = this.environmentData.flatShading;
-            }
-
-            this.groundMaterial = new THREE.MeshLambertMaterial(this.groundMaterialProps);
+            this.groundMaterial = new THREE.MeshPhongMaterial(this.groundMaterialProps);
         }
 
         var groundctx = this.groundCanvas.getContext("2d");
@@ -1493,7 +1483,6 @@ AFRAME.registerComponent("environment", {
                 var diff = new THREE.Color(col2.r - col1.r, col2.g - col1.g, col2.b - col1.b);
                 var perlin = new PerlinNoise();
                 for (i = 0, j = 0, numpixels = im.length; i < numpixels; i += 4, j++) {
-                    //console.log( (j % size) / size, j / size)
                     var rnd = perlin.noise(((j % size) / size) * 3, (j / size / size) * 3, 0);
                     im[i + 0] = Math.floor((col1.r + diff.r * rnd) * 255);
                     im[i + 1] = Math.floor((col1.g + diff.g * rnd) * 255);

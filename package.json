@@ -4,7 +4,7 @@
     "description": "Infinite environments for your A-Frame VR scene in just one file.",
     "plugin": "dist/aframe-environment-component.js",
     "pluginmin": "dist/aframe-environment-component.min.js",
-    "demo": "demo/aframe-environment-component.html",
+    "demo": "demo/index.html",
     "targets": {
         "main": false,
         "plugin": {
@@ -32,9 +32,8 @@
         "clean": "rm -Rf .parcel-cache dist demo",
         "prebuild": "yarn clean",
         "build": "parcel build",
-        "prepublish": "yarn build",
         "predeploy": "yarn build",
-        "deploy": "gh-pages -b ghpages -d demo"
+        "deploy": "gh-pages -b gh-pages -d demo"
     },
     "repository": {
         "type": "git",
@@ -56,7 +55,7 @@
     },
     "homepage": "https://github.com/PiTiLeZarD/aframe-environment-component#readme",
     "devDependencies": {
-        "ghpages": "^0.0.10"
+        "gh-pages": "^4.0.0"
     },
     "dependencies": {
         "parcel": "^2.5.0"

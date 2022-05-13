@@ -1,4 +1,4 @@
-import PerlinNoise from "./PerlinNoise";
+import * as perlin from "./PerlinNoise";
 import presets from "./presets";
 import assets from "./assets";
 
@@ -410,7 +410,7 @@ const environment = {
             "0." +
                 Math.sin(this.environmentData.seed * 9999 * x)
                     .toString()
-                    .substr(7)
+                    .substring(7)
         );
     },
 
@@ -433,7 +433,7 @@ const environment = {
                     resolution - 1
                 );
             }
-            var perlin = new PerlinNoise(this.environmentData.seed);
+            var perlinSeed = perlin.seed(this.environmentData.seed);
             var verts = this.groundGeometry.attributes.position.array;
             var numVerts = verts.length;
             var frequency = 10;
@@ -450,11 +450,11 @@ const environment = {
                 var h;
                 switch (this.environmentData.ground) {
                     case "hills": {
-                        h = Math.max(0, perlin.noise(x, y, 0));
+                        h = Math.max(0, perlin.noise(perlinSeed, x, y, 0));
                         break;
                     }
                     case "canyon": {
-                        h = 0.2 + perlin.noise(x, y, 0) * 0.8;
+                        h = 0.2 + perlin.noise(perlinSeed, x, y, 0) * 0.8;
                         h = Math.min(1, Math.pow(h, 2) * 10);
                         break;
                     }
@@ -673,9 +673,9 @@ const environment = {
                 col1 = new THREE.Color(this.environmentData.groundColor);
                 col2 = new THREE.Color(this.environmentData.groundColor2);
                 var diff = new THREE.Color(col2.r - col1.r, col2.g - col1.g, col2.b - col1.b);
-                var perlin = new PerlinNoise();
+                const perlinSeed = perlin.seed();
                 for (i = 0, j = 0, numpixels = im.length; i < numpixels; i += 4, j++) {
-                    var rnd = perlin.noise(((j % size) / size) * 3, (j / size / size) * 3, 0);
+                    var rnd = perlin.noise(perlinSeed, ((j % size) / size) * 3, (j / size / size) * 3, 0);
                     im[i + 0] = Math.floor((col1.r + diff.r * rnd) * 255);
                     im[i + 1] = Math.floor((col1.g + diff.g * rnd) * 255);
                     im[i + 2] = Math.floor((col1.b + diff.b * rnd) * 255);

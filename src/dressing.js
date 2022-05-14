@@ -35,14 +35,13 @@ export default {
     // updates set dressing
     updateDressing: function () {
         var dressing = new THREE.Object3D();
-        var geometries = [];
         this.dressing.setAttribute("visible", this.environmentData.dressing != "none");
         if (this.environmentData.dressing == "none") {
             return;
         }
 
         // get array of geometries
-        var geoset;
+        let geoset;
         switch (this.environmentData.dressing) {
             case "cubes": {
                 geoset = [new THREE.BoxGeometry(1, 1, 1)];
@@ -66,42 +65,38 @@ export default {
             }
         }
 
+        const geometries = [];
         for (var i = 0, r = 88343; i < this.environmentData.dressingAmount; i++, r++) {
-            var clone = geoset[Math.floor(this.random(33 + i) * geoset.length)].clone;
-            var geo = geoset[Math.floor(this.random(33 + i) * geoset.length)].clone();
-            /*
-          // change vertex colors
-          var color = new THREE.Color(0xFFFFFF).multiplyScalar(1 - this.random(66 + i) * 0.3);
-    
-          for (var f = 0, fl = geo.faces.length; f < fl; f++) {
-            var face = geo.faces[f];
-            for (var v = 0; v < 3; v++) {
-              p = geo.vertices[face[faceindex[v]]]; // get vertex position
-              var floorao =  p.y / 4 + 0.75;
-              face.vertexColors[v] = new THREE.Color(color.r * floorao, color.g * floorao, color.b * floorao);
-            }
-          }
-    */
+            const geo = geoset[Math.floor(this.random(33 + i) * geoset.length)].clone();
+
+            // // change vertex colors
+            // var color = new THREE.Color(0xffffff).multiplyScalar(1 - this.random(66 + i) * 0.3);
+
+            // for (var f = 0, fl = geo.faces.length; f < fl; f++) {
+            //     var face = geo.faces[f];
+            //     for (var v = 0; v < 3; v++) {
+            //         p = geo.vertices[face[faceindex[v]]]; // get vertex position
+            //         var floorao = p.y / 4 + 0.75;
+            //         face.vertexColors[v] = new THREE.Color(color.r * floorao, color.g * floorao, color.b * floorao);
+            //     }
+            // }
+
             // set random position, rotation and scale
-            var ds = this.environmentData.dressingScale;
-            var dv = new THREE.Vector3(
+            const ds = this.environmentData.dressingScale;
+            const dv = new THREE.Vector3(
                 this.environmentData.dressingVariance.x,
                 this.environmentData.dressingVariance.y,
                 this.environmentData.dressingVariance.z
             );
-            var distance;
-            var onPlayArea = this.random(r) < this.environmentData.dressingOnPlayArea;
-            if (onPlayArea) {
-                distance = this.random(r + 1) * 15;
-            } else {
-                distance =
-                    10 + Math.max(dv.x, dv.z) + 10 * this.random(r + 1) + (this.random(r + 2) * this.STAGE_SIZE) / 3;
-            }
+            const onPlayArea = this.random(r) < this.environmentData.dressingOnPlayArea;
+            const distance = onPlayArea
+                ? this.random(r + 1) * 15
+                : 10 + Math.max(dv.x, dv.z) + 10 * this.random(r + 1) + (this.random(r + 2) * this.STAGE_SIZE) / 3;
 
-            var direction = this.random(r + 3) * Math.PI * 2;
-            var matrix = new THREE.Matrix4();
-            var scale = this.random(r + 4);
-            var uniformScale = this.environmentData.dressingUniformScale;
+            const direction = this.random(r + 3) * Math.PI * 2;
+            const matrix = new THREE.Matrix4();
+            const scale = this.random(r + 4);
+            const uniformScale = this.environmentData.dressingUniformScale;
 
             matrix.compose(
                 // position
@@ -123,16 +118,16 @@ export default {
         }
 
         // convert geometry to buffergeometry
-        var bufgeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+        const bufgeo = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
         bufgeo.attributes.position.needsUpdate = true;
 
         // setup Materialial
-        var material = new THREE.MeshLambertMaterial({
+        const material = new THREE.MeshLambertMaterial({
             color: new THREE.Color(this.environmentData.dressingColor),
         });
 
         // create mesh
-        var mesh = new THREE.Mesh(bufgeo, material);
+        const mesh = new THREE.Mesh(bufgeo, material);
         dressing.add(mesh);
         // add to scene
         this.dressing.setObject3D("mesh", dressing);
@@ -141,10 +136,11 @@ export default {
     // returns an array of THREE.Geometry for set dressing
     getAssetGeometry: function (data) {
         if (!data) return null;
+
         var geoset = [];
         var self = this;
-        function applyNoise(geo, noise) {
-            var n = new THREE.Vector3();
+
+        const applyNoise = (geo, noise) => {
             var verts = geo.attributes.position.array;
             var numVerts = verts.length;
             for (var i = 0; i < numVerts; i += 3) {
@@ -153,7 +149,7 @@ export default {
                 verts[i + 2] = (self.random(i + numVerts * 2) - 0.5) * noise;
             }
             geo.attributes.position.needsUpdate = true;
-        }
+        };
 
         var i, geo, verts;
 

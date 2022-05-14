@@ -14,6 +14,8 @@ const enviroGetSettings = () => {
     document.querySelector("[environment]").components["environment"].logPreset();
 };
 
+AFRAME.registerComponent("environment", environment);
 AFRAME.registerShader("skyshader", skyshader);
 AFRAME.registerShader("gradientshader", gradientshader);
-AFRAME.registerComponent("environment", environment);
+
+document.getElementById("environment").setAttribute("environment", { preset: "forest" });

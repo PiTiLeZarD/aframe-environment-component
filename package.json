@@ -28,6 +28,7 @@
         }
     },
     "scripts": {
+        "predev": "yarn clean",
         "dev": "parcel src/index.html",
         "clean": "rm -Rf .parcel-cache dist demo",
         "prebuild": "yarn clean",

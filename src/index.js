@@ -18,4 +18,5 @@ AFRAME.registerComponent("environment", environment);
 AFRAME.registerShader("skyshader", skyshader);
 AFRAME.registerShader("gradientshader", gradientshader);
 
-document.getElementById("environment").setAttribute("environment", { preset: "forest" });
+const el = document.getElementById("environment");
+el.setAttribute("environment", el.getAttribute("environment") ?? { preset: "forest" });

@@ -98,13 +98,11 @@ const environment = {
     },
 
     update: function (oldDataNonPreset) {
-        var oldData;
+        const oldData = !this.data.preset ? oldDataNonPreset : AFRAME.utils.extendDeep({}, this.environmentData);
 
         if (!this.data.preset) {
-            oldData = oldDataNonPreset;
             this.environmentData = this.data;
         } else {
-            oldData = AFRAME.utils.clone(this.environmentData);
             this.environmentData = {};
             Object.assign(this.environmentData, this.data);
             Object.assign(this.environmentData, this.presets[this.data.preset]);

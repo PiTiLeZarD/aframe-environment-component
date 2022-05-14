@@ -6,6 +6,8 @@ import sky from "./sky";
 import stars from "./stars";
 import dressing from "./dressing";
 import grid from "./grid";
+import hemilight from "./hemilight";
+import sunlight from "./sunlight";
 
 const environment = {
     ...ground,
@@ -13,8 +15,11 @@ const environment = {
     ...stars,
     ...dressing,
     ...grid,
+    ...hemilight,
+    ...sunlight,
 
     presets,
+    assets,
 
     schema: {
         ...ground.schema,
@@ -24,29 +29,7 @@ const environment = {
         ...grid.schema,
 
         active: { default: false },
-        preset: {
-            default: "default",
-            oneOf: [
-                "none",
-                "default",
-                "contact",
-                "egypt",
-                "checkerboard",
-                "forest",
-                "goaland",
-                "yavapai",
-                "goldmine",
-                "arches",
-                "threetowers",
-                "poison",
-                "tron",
-                "japan",
-                "dream",
-                "volcano",
-                "starry",
-                "osiris",
-            ],
-        },
+        preset: presets.schema,
         seed: { type: "int", default: 1, min: 0, max: 1000 },
 
         horizonColor: { type: "color" },
@@ -68,9 +51,6 @@ const environment = {
         // stage ground diameter (and sky radius)
         this.STAGE_SIZE = 200;
 
-        // data for dressing meshes
-        this.assets = assets;
-
         // save current scene fog
         this.userFog = this.el.sceneEl.getAttribute("fog");
 
@@ -79,24 +59,8 @@ const environment = {
         this.initGround();
         this.initDressing();
         this.initGrid();
-
-        // create lights (one ambient hemisphere light, and one directional for the sun)
-        this.hemilight = document.createElement("a-entity");
-        this.hemilight.classList.add("environment");
-        this.hemilight.setAttribute("position", "0 50 0");
-        this.hemilight.setAttribute("light", {
-            type: "hemisphere",
-            color: "#CEE4F0",
-            intensity: 0.4,
-        });
-        this.sunlight = document.createElement("a-entity");
-        this.sunlight.classList.add("environment");
-        this.sunlight.setAttribute("position", this.data.lightPosition);
-        this.sunlight.setAttribute("light", { intensity: 0.6 });
-
-        // add everything to the scene
-        this.el.appendChild(this.hemilight);
-        this.el.appendChild(this.sunlight);
+        this.initHemilight();
+        this.initSunlight();
     },
 
     // returns a fog color from a specific sky type and sun height

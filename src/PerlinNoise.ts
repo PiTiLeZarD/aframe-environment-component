@@ -4,6 +4,13 @@
 const dot = (g: number[], x: number, y: number, z: number) => g[0] * x + g[1] * y + g[2] * z;
 const mix = (a: number, b: number, t: number) => (1.0 - t) * a + t * b;
 const fade = (t: number) => t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+const random = (seed: number, max: number) =>
+    parseFloat(
+        "0." +
+            Math.sin(seed * 9999 * max)
+                .toString()
+                .substring(7)
+    );
 
 const seed = (seed: number) => {
     const grad3 = [
@@ -21,17 +28,7 @@ const seed = (seed: number) => {
         [0, -1, -1],
     ];
 
-    const p = new Array(256).fill(null).map((_, i) =>
-        Math.floor(
-            256 *
-                parseFloat(
-                    "0." +
-                        Math.sin(seed * 9999 * i)
-                            .toString()
-                            .substring(7)
-                )
-        )
-    );
+    const p = new Array(256).fill(null).map((_, i) => Math.floor(256 * random(seed, i)));
 
     // To remove the need for index wrapping, double the permutation table length
     const perm = [...p, ...p];
@@ -100,4 +97,4 @@ const noise = ({ grad3, perm }, x: number, y: number, z: number) => {
     return nxyz;
 };
 
-export { seed, dot, mix, fade, noise };
+export { seed, dot, mix, fade, noise, random };

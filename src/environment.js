@@ -71,17 +71,6 @@ const environment = {
         // data for dressing meshes
         this.assets = assets;
 
-        // scale down dressing meshes (coordinates were saved in integers for better compression)
-        for (var i in this.assets) {
-            for (var j = 0; j < this.assets[i].length; j++) {
-                var asset = this.assets[i][j];
-                if (asset.type != "mesh") continue;
-                for (var v = 0, len = asset.vertices.length; v < len; v++) {
-                    asset.vertices[v] /= 1000.0;
-                }
-            }
-        }
-
         // save current scene fog
         this.userFog = this.el.sceneEl.getAttribute("fog");
 

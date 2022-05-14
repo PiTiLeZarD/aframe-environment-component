@@ -1,8 +1,6 @@
 # Disclaimer:
 
-I'm currently trying to clean up this repository with bfg, node_modules was committed here and there, trying to get the big useless files out. There's so little it should be blazing fast!
-
-Stay tuned!
+I'm trying to modernise this library, I know JS, but I'm learning THREE.js and Aframe. Bear with me. If you want to help, hit me up!
 
 # aframe-environment-component-v2
 

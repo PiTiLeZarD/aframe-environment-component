@@ -109,39 +109,9 @@ const environment = {
             Object.assign(this.environmentData, this.el.components.environment.attrValue);
         }
 
-        var skyType = this.environmentData.skyType;
-        var sunPos = new THREE.Vector3(
-            this.environmentData.lightPosition.x,
-            this.environmentData.lightPosition.y,
-            this.environmentData.lightPosition.z
-        );
-        sunPos.normalize();
-
-        // update light colors and intensities
-        if (this.sunlight) {
-            this.sunlight.setAttribute("position", this.environmentData.lightPosition);
-            if (skyType != "atmosphere") {
-                // dim down the sky color for the light
-                var skycol = new THREE.Color(this.environmentData.skyColor);
-                skycol.r = (skycol.r + 1.0) / 2.0;
-                skycol.g = (skycol.g + 1.0) / 2.0;
-                skycol.b = (skycol.b + 1.0) / 2.0;
-                this.hemilight.setAttribute("light", { color: "#" + skycol.getHexString() });
-                this.sunlight.setAttribute("light", { intensity: 0.6 });
-                this.hemilight.setAttribute("light", { intensity: 0.6 });
-            } else {
-                this.sunlight.setAttribute("light", { intensity: 0.1 + sunPos.y * 0.5 });
-                this.hemilight.setAttribute("light", { intensity: 0.1 + sunPos.y * 0.5 });
-            }
-
-            this.sunlight.setAttribute("light", {
-                castShadow: this.environmentData.shadow,
-                shadowCameraLeft: -this.environmentData.shadowSize,
-                shadowCameraBottom: -this.environmentData.shadowSize,
-                shadowCameraRight: this.environmentData.shadowSize,
-                shadowCameraTop: this.environmentData.shadowSize,
-            });
-        }
+        const skyType = this.environmentData.skyType;
+        const sunPos = this.updateSunlight();
+        this.updateHemilight();
 
         // update sky colors
         if (
@@ -181,13 +151,6 @@ const environment = {
             this.el.sceneEl.removeAttribute("fog");
         }
 
-        // scene lights
-        this.sunlight.setAttribute("light", {
-            type: this.environmentData.lighting == "point" ? "point" : "directional",
-        });
-        this.sunlight.setAttribute("visible", this.environmentData.lighting !== "none");
-        this.hemilight.setAttribute("visible", this.environmentData.lighting !== "none");
-
         // check if ground geometry needs to be calculated
         var updateGroundGeometry =
             !this.groundGeometry ||
@@ -208,7 +171,6 @@ const environment = {
         ) {
             this.updateGround(updateGroundGeometry);
             // set bounce light color to ground color
-            if (this.hemilight) this.hemilight.setAttribute("light", { groundColor: this.environmentData.groundColor });
         }
 
         // update dressing

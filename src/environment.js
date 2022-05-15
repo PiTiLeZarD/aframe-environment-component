@@ -90,9 +90,6 @@ const environment = {
         }
 
         this.el.setAttribute("visible", this.environmentData.active);
-
-        // dump current component settings to console
-        this.dumpParametersDiff();
     },
 
     // logs current parameters to console, for saving to a preset
@@ -164,6 +161,7 @@ const environment = {
                 }
             }
         }
+        console.log(params);
     },
 
     // Custom Math.random() with seed. Given this.environmentData.seed and x, it always returns the same "random" number

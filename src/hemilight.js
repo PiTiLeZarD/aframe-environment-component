@@ -21,7 +21,7 @@ export default {
                 skycol.b = (skycol.b + 1.0) / 2.0;
                 this.hemilight.setAttribute("light", { color: "#" + skycol.getHexString(), intensity: 0.6 });
             } else {
-                this.hemilight.setAttribute("light", { intensity: 0.1 + sunPos.y * 0.5 });
+                this.hemilight.setAttribute("light", { intensity: 0.1 + this.getSunPosition().y * 0.5 });
             }
 
             this.hemilight.setAttribute("visible", this.environmentData.lighting !== "none");

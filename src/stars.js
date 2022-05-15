@@ -36,4 +36,14 @@ export default {
         numStars = Math.floor(Math.min(2000, Math.max(0, numStars)));
         this.stars.getObject3D("mesh").geometry.setDrawRange(0, numStars);
     },
+
+    updateStars: function () {
+        if (this.stars) {
+            const atmo = this.environmentData.skyType == "atmosphere";
+            this.stars.setAttribute("visible", atmo);
+            if (atmo) {
+                this.setStars((1 - Math.max(0, (this.getSunPosition().y + 0.08) * 8)) * 2000);
+            }
+        }
+    },
 };

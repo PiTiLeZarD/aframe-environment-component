@@ -32,6 +32,22 @@ export default {
         this.el.appendChild(this.dressing);
     },
 
+    shouldUpdateDressing: function (oldData) {
+        return (
+            this.environmentData.seed != oldData.seed ||
+            this.environmentData.dressingOnPlayArea != oldData.dressingOnPlayArea ||
+            this.environmentData.dressing != oldData.dressing ||
+            this.environmentData.flatShading != oldData.flatShading ||
+            this.environmentData.dressingAmount != oldData.dressingAmount ||
+            this.environmentData.dressingScale != oldData.dressingScale ||
+            this.environmentData.dressingColor != oldData.dressingColor ||
+            this.environmentData.dressingVariance.x != oldData.dressingVariance.x ||
+            this.environmentData.dressingVariance.y != oldData.dressingVariance.y ||
+            this.environmentData.dressingVariance.z != oldData.dressingVariance.z ||
+            this.environmentData.dressingUniformScale != oldData.dressingUniformScale
+        );
+    },
+
     // updates set dressing
     updateDressing: function () {
         var dressing = new THREE.Object3D();

@@ -9,13 +9,18 @@ export default {
         this.el.appendChild(this.sunlight);
     },
 
-    updateSunlight: function () {
+    getSunPosition: function () {
         const sunPos = new THREE.Vector3(
             this.environmentData.lightPosition.x,
             this.environmentData.lightPosition.y,
             this.environmentData.lightPosition.z
         );
         sunPos.normalize();
+        return sunPos;
+    },
+
+    updateSunlight: function () {
+        const sunPos = this.getSunPosition();
 
         // update light colors and intensities
         if (this.sunlight) {
@@ -37,7 +42,5 @@ export default {
 
             this.sunlight.setAttribute("visible", this.environmentData.lighting !== "none");
         }
-
-        return sunPos;
     },
 };

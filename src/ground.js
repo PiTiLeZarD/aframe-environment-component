@@ -24,6 +24,29 @@ export default {
         this.el.appendChild(this.ground);
     },
 
+    shouldUpdateGroundGeometry: function (oldData) {
+        return (
+            !this.groundGeometry ||
+            this.environmentData.seed != oldData.seed ||
+            this.environmentData.ground != oldData.ground ||
+            this.environmentData.playArea != oldData.playArea ||
+            this.environmentData.flatShading != oldData.flatShading
+        );
+    },
+
+    shouldUpdateGround: function (oldData) {
+        // check if any parameter of the ground was changed, and update it
+        return (
+            this.shouldUpdateGroundGeometry(oldData) ||
+            this.environmentData.groundColor != oldData.groundColor ||
+            this.environmentData.groundColor2 != oldData.groundColor2 ||
+            this.environmentData.groundYScale != oldData.groundYScale ||
+            this.environmentData.groundTexture != oldData.groundTexture ||
+            this.environmentData.gridColor != oldData.gridColor ||
+            this.environmentData.grid != oldData.grid
+        );
+    },
+
     // updates ground attributes, and geometry if required
     updateGround: function (updateGeometry) {
         var resolution = 64; // number of divisions of the ground mesh

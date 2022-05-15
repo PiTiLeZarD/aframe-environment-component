@@ -110,38 +110,15 @@ const environment = {
         }
 
         const skyType = this.environmentData.skyType;
-        const sunPos = this.updateSunlight();
+        this.updateSunlight();
         this.updateHemilight();
-
-        // update sky colors
-        if (
-            skyType !== oldData.skyType ||
-            this.environmentData.skyColor != oldData.skyColor ||
-            this.environmentData.horizonColor != oldData.horizonColor
-        ) {
-            var mat = {};
-            mat.shader = { none: "flat", color: "flat", gradient: "gradientshader", atmosphere: "skyshader" }[skyType];
-            if (this.stars) {
-                this.stars.setAttribute("visible", skyType == "atmosphere");
-            }
-            if (skyType == "color") {
-                mat.color = this.environmentData.skyColor;
-                mat.fog = false;
-            } else if (skyType == "gradient") {
-                mat.topColor = this.environmentData.skyColor;
-                mat.bottomColor = this.environmentData.horizonColor;
-            }
-
-            this.sky.setAttribute("material", mat);
-        }
-
-        // set atmosphere sun position and stars
-        if (skyType == "atmosphere") {
-            this.sky.setAttribute("material", { sunPosition: sunPos });
-            this.setStars((1 - Math.max(0, (sunPos.y + 0.08) * 8)) * 2000);
+        if (this.shouldUpdateSky(oldData)) {
+            this.updateSky();
+            this.updateStars();
         }
 
         // set fog color
+        const sunPos = this.getSunPosition();
         if (this.environmentData.fog > 0) {
             this.el.sceneEl.setAttribute("fog", {
                 color: this.getFogColor(skyType, sunPos.y),
@@ -151,46 +128,13 @@ const environment = {
             this.el.sceneEl.removeAttribute("fog");
         }
 
-        // check if ground geometry needs to be calculated
-        var updateGroundGeometry =
-            !this.groundGeometry ||
-            this.environmentData.seed != oldData.seed ||
-            this.environmentData.ground != oldData.ground ||
-            this.environmentData.playArea != oldData.playArea ||
-            this.environmentData.flatShading != oldData.flatShading;
-
-        // check if any parameter of the ground was changed, and update it
-        if (
-            updateGroundGeometry ||
-            this.environmentData.groundColor != oldData.groundColor ||
-            this.environmentData.groundColor2 != oldData.groundColor2 ||
-            this.environmentData.groundYScale != oldData.groundYScale ||
-            this.environmentData.groundTexture != oldData.groundTexture ||
-            this.environmentData.gridColor != oldData.gridColor ||
-            this.environmentData.grid != oldData.grid
-        ) {
-            this.updateGround(updateGroundGeometry);
-            // set bounce light color to ground color
+        if (this.shouldUpdateGround(oldData)) {
+            this.updateGround(this.shouldUpdateGroundGeometry(oldData));
         }
 
-        // update dressing
-        if (
-            this.environmentData.seed != oldData.seed ||
-            this.environmentData.dressingOnPlayArea != oldData.dressingOnPlayArea ||
-            this.environmentData.dressing != oldData.dressing ||
-            this.environmentData.flatShading != oldData.flatShading ||
-            this.environmentData.dressingAmount != oldData.dressingAmount ||
-            this.environmentData.dressingScale != oldData.dressingScale ||
-            this.environmentData.dressingColor != oldData.dressingColor ||
-            this.environmentData.dressingVariance.x != oldData.dressingVariance.x ||
-            this.environmentData.dressingVariance.y != oldData.dressingVariance.y ||
-            this.environmentData.dressingVariance.z != oldData.dressingVariance.z ||
-            this.environmentData.dressingUniformScale != oldData.dressingUniformScale
-        ) {
+        if (this.shouldUpdateDressing(oldData)) {
             this.updateDressing();
         }
-
-        this.sky.setAttribute("visible", skyType !== "none");
 
         this.el.setAttribute("visible", this.environmentData.active);
         if (!this.environmentData.active) {

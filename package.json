@@ -5,6 +5,7 @@
     "plugin": "dist/aframe-environment-component.js",
     "pluginmin": "dist/aframe-environment-component.min.js",
     "demo": "demo/index.html",
+    "main": "dist/aframe-environment-component.min.js",
     "files": [
         "dist/aframe-environment-component.min.js"
     ],

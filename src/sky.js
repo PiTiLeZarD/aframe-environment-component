@@ -32,11 +32,11 @@ export default {
         } else if (skyType == "gradient") {
             mat.topColor = this.environmentData.skyColor;
             mat.bottomColor = this.environmentData.horizonColor;
-        } else if (skyType == "atmosphere") {
-            mat.sunPosition = this.getSunPosition();
         }
-
         this.sky.setAttribute("material", mat);
+        if (skyType == "atmosphere") {
+            this.sky.setAttribute("material", "sunPosition", this.getSunPosition());
+        }
         this.sky.setAttribute("visible", skyType !== "none");
     },
 };

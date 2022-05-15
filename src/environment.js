@@ -8,6 +8,7 @@ import dressing from "./dressing";
 import grid from "./grid";
 import hemilight from "./hemilight";
 import sunlight from "./sunlight";
+import fog from "./fog";
 
 const environment = {
     ...ground,
@@ -17,6 +18,7 @@ const environment = {
     ...grid,
     ...hemilight,
     ...sunlight,
+    ...fog,
 
     presets,
     assets,
@@ -27,6 +29,7 @@ const environment = {
         ...stars.schema,
         ...dressing.schema,
         ...grid.schema,
+        ...fog.schema,
 
         active: { default: false },
         preset: presets.schema,
@@ -37,7 +40,6 @@ const environment = {
         shadow: { default: false },
         shadowSize: { default: 10 },
         lightPosition: { type: "vec3", default: { x: 0, y: 1, z: -0.2 } },
-        fog: { type: "float", default: 0, min: 0, max: 1 },
 
         flatShading: { default: false },
         playArea: { type: "float", default: 1, min: 0.5, max: 10 },
@@ -51,9 +53,6 @@ const environment = {
         // stage ground diameter (and sky radius)
         this.STAGE_SIZE = 200;
 
-        // save current scene fog
-        this.userFog = this.el.sceneEl.getAttribute("fog");
-
         this.initSky();
         this.initStars();
         this.initGround();
@@ -61,40 +60,7 @@ const environment = {
         this.initGrid();
         this.initHemilight();
         this.initSunlight();
-    },
-
-    // returns a fog color from a specific sky type and sun height
-    getFogColor: function (skyType, sunHeight) {
-        var fogColor;
-        if (skyType == "color" || skyType == "none") {
-            fogColor = new THREE.Color(this.environmentData.skyColor);
-        } else if (skyType == "gradient") {
-            fogColor = new THREE.Color(this.environmentData.horizonColor);
-        } else if (skyType == "atmosphere") {
-            var fogRatios = [1, 0.5, 0.22, 0.1, 0.05, 0];
-            var fogColors = ["#C0CDCF", "#81ADC5", "#525e62", "#2a2d2d", "#141616", "#000"];
-
-            if (sunHeight <= 0) return "#000";
-
-            sunHeight = Math.min(1, sunHeight);
-
-            for (var i = 0; i < fogRatios.length; i++) {
-                if (sunHeight > fogRatios[i]) {
-                    var c1 = new THREE.Color(fogColors[i - 1]);
-                    var c2 = new THREE.Color(fogColors[i]);
-                    var a = (sunHeight - fogRatios[i]) / (fogRatios[i - 1] - fogRatios[i]);
-                    c2.lerp(c1, a);
-                    fogColor = c2;
-                    break;
-                }
-            }
-        }
-        // dim down the color
-        fogColor.multiplyScalar(0.9);
-        // mix it a bit with ground color
-        fogColor.lerp(new THREE.Color(this.data.groundColor), 0.3);
-
-        return "#" + fogColor.getHexString();
+        this.initFog();
     },
 
     update: function (oldDataNonPreset) {
@@ -109,41 +75,21 @@ const environment = {
             Object.assign(this.environmentData, this.el.components.environment.attrValue);
         }
 
-        const skyType = this.environmentData.skyType;
         this.updateSunlight();
         this.updateHemilight();
+        this.updateFog();
         if (this.shouldUpdateSky(oldData)) {
             this.updateSky();
             this.updateStars();
         }
-
-        // set fog color
-        const sunPos = this.getSunPosition();
-        if (this.environmentData.fog > 0) {
-            this.el.sceneEl.setAttribute("fog", {
-                color: this.getFogColor(skyType, sunPos.y),
-                far: (1.01 - this.environmentData.fog) * this.STAGE_SIZE * 2,
-            });
-        } else {
-            this.el.sceneEl.removeAttribute("fog");
-        }
-
         if (this.shouldUpdateGround(oldData)) {
             this.updateGround(this.shouldUpdateGroundGeometry(oldData));
         }
-
         if (this.shouldUpdateDressing(oldData)) {
             this.updateDressing();
         }
 
         this.el.setAttribute("visible", this.environmentData.active);
-        if (!this.environmentData.active) {
-            if (this.userFog) {
-                this.el.sceneEl.setAttribute("fog", this.userFog);
-            } else {
-                this.el.sceneEl.removeAttribute("fog");
-            }
-        }
 
         // dump current component settings to console
         this.dumpParametersDiff();

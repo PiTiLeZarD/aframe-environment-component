@@ -1,6 +1,6 @@
 {
-    "name": "aframe-environment-component",
-    "version": "2.0.0-alpha.1",
+    "name": "aframe-environment-component-v2",
+    "version": "2.0.0-alpha.2",
     "description": "Infinite environments for your A-Frame VR scene in just one file.",
     "plugin": "dist/aframe-environment-component.js",
     "pluginmin": "dist/aframe-environment-component.min.js",
@@ -33,6 +33,7 @@
         "clean": "rm -Rf .parcel-cache dist demo",
         "prebuild": "yarn clean",
         "build": "parcel build",
+        "prepublish": "yarn clean && yarn build",
         "predeploy": "yarn build",
         "deploy": "gh-pages -b gh-pages -d demo"
     },
@@ -40,6 +41,11 @@
         "type": "git",
         "url": "git+https://github.com/PiTiLeZarD/aframe-environment-component.git"
     },
+    "bugs": {
+        "url": "https://github.com/PiTiLeZarD/aframe-environment-component/issues",
+        "email": "pitilezard@gmail.com"
+    },
+    "homepage": "https://pitilezard.github.io/aframe-environment-component-v2/",
     "keywords": [
         "aframe",
         "aframe-component",
@@ -51,14 +57,9 @@
     ],
     "author": "Diego F. Goberna <github@feiss.be>",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/PiTiLeZarD/aframe-environment-component/issues"
-    },
-    "homepage": "https://github.com/PiTiLeZarD/aframe-environment-component#readme",
     "devDependencies": {
-        "gh-pages": "^4.0.0"
-    },
-    "dependencies": {
+        "gh-pages": "^4.0.0",
         "parcel": "^2.5.0"
-    }
+    },
+    "dependencies": {}
 }
